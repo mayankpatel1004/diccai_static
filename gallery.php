@@ -259,13 +259,15 @@ $currentGallery = $galleries[$galleryId];
       </div>
 
       <!-- Dynamically generated gallery tabs -->
-      <div class="gallery-tabs">
-        <?php foreach ($galleries as $id => $g): ?>
-          <a href="?gallery=<?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?>"
-             class="gallery-tab <?php echo ($id === $galleryId) ? 'active' : ''; ?>">
-            Gallery <?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?>
-          </a>
-        <?php endforeach; ?>
+       <div class="hidden">
+        <div class="gallery-tabs">
+          <?php foreach ($galleries as $id => $g): ?>
+            <a href="?gallery=<?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?>"
+              class="gallery-tab <?php echo ($id === $galleryId) ? 'active' : ''; ?>">
+              Gallery <?php echo htmlspecialchars($id, ENT_QUOTES, 'UTF-8'); ?>
+            </a>
+          <?php endforeach; ?>
+        </div>
       </div>
 
       <div class="gallery-grid" id="galleryGrid"></div>
