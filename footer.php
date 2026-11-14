@@ -7,7 +7,7 @@
         <div>
           <h3 class="text-white font-display font-bold text-lg mb-5">ABOUT DICCAI</h3>
           <ul class="space-y-3 text-sm">
-            <li><a href="<?php echo $url;?>about-diccai">About DICCAI</a></li>
+            <!-- <li><a href="< ?php echo $url;?>about-diccai">About DICCAI</a></li> -->
             <li><a href="<?php echo $url;?>images/12A provisional.pdf" target="_blank">12A Provisional</a></li>
             <li><a href="<?php echo $url;?>images/80G provisional.pdf" target="_blank">80G Provisional</a></li>
             <li><a href="<?php echo $url;?>images/Approval Letter for form CSR1 (3).PDF" target="_blank">CSR1</a></li>
