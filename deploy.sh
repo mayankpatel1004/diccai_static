@@ -8,7 +8,7 @@ LOCAL_DIR="/opt/lampp/htdocs/diccai_static"
 REMOTE_USER="u797036281"
 REMOTE_HOST="82.112.239.225"
 REMOTE_PORT="65002"
-REMOTE_DIR="/home/u797234481/domains/diccai.com/public_html"
+REMOTE_DIR="/home/u797036281/domains/diccai.com/public_html"
 BRANCH="main"
 
 # ------------------------------------------------------------------
