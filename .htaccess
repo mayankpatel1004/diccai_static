@@ -1,21 +1,31 @@
 # =====================================================================
 #  diccai.com — .htaccess
-#  Clean URLs (hide .php), HTTPS + www canonicalization
+#  Works on BOTH:
+#    - http://localhost/diccai_static/    (local dev)
+#    - https://www.diccai.com/            (production)
 # =====================================================================
 
 Options -MultiViews
 Options +FollowSymLinks
 RewriteEngine On
 
+# Detect local environment once, store in ENV:LOCAL
+# Localhost / 127.0.0.1 / *.local / *.test are treated as "local"
+RewriteCond %{HTTP_HOST} ^(localhost|127\.0\.0\.1|.*\.local|.*\.test)(:[0-9]+)?$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^localhost(:[0-9]+)?$ [NC]
+RewriteRule ^ - [E=LOCAL:1]
+
 # ---------------------------------------------------------------------
-# 1. Force HTTPS
+# 1. Force HTTPS  (PRODUCTION ONLY)
 # ---------------------------------------------------------------------
+RewriteCond %{ENV:LOCAL} !1
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # ---------------------------------------------------------------------
-# 2. Force www (remove the "!" if you prefer non-www)
+# 2. Force www   (PRODUCTION ONLY)
 # ---------------------------------------------------------------------
+RewriteCond %{ENV:LOCAL} !1
 RewriteCond %{HTTP_HOST} ^diccai\.com$ [NC]
 RewriteRule ^ https://www.diccai.com%{REQUEST_URI} [L,R=301]
 
@@ -24,15 +34,17 @@ RewriteRule ^ https://www.diccai.com%{REQUEST_URI} [L,R=301]
 #    /our-objectives.php        -> /our-objectives
 #    /our-objectives.php?id=5   -> /our-objectives?id=5
 #    Skips index.php so the front controller still works if present.
+#    Works with a sub-directory base (e.g. /diccai_static/).
 # ---------------------------------------------------------------------
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
-RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteCond %{REQUEST_URI} !/index\.php$ [NC]
 RewriteRule ^ /%1 [R=301,L,NE]
 
 # ---------------------------------------------------------------------
 # 4. Internally map clean URLs back to .php
 #    /our-objectives  -> /our-objectives.php
 #    Only if the .php file actually exists (so 404s behave correctly).
+#    Uses %{REQUEST_FILENAME} so it works in any sub-directory.
 # ---------------------------------------------------------------------
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -40,51 +52,42 @@ RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.+?)/?$ $1.php [L]
 
 # ---------------------------------------------------------------------
-# 5. (Optional) If you use a front controller (index.php), route
-#    everything else through it. Comment out if not needed.
-# ---------------------------------------------------------------------
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteRule ^ index.php [L,QSA]
-
-# ---------------------------------------------------------------------
-# 6. Pretty directory URLs: /gallery -> /gallery/ (optional)
+# 5. Pretty directory URLs: /gallery -> /gallery/ (optional)
 # ---------------------------------------------------------------------
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteCond %{REQUEST_URI} !/$
 RewriteRule ^(.+)$ /$1/ [R=301,L]
 
 # ---------------------------------------------------------------------
-# 7. Security hardening
+# 6. Security hardening
 # ---------------------------------------------------------------------
-# Disable directory listing
 Options -Indexes
 
-# Block access to sensitive files
 <FilesMatch "^(\.env|\.htaccess|\.htpasswd|composer\.(json|lock)|package(-lock)?\.json|\.gitignore|README\.md)$">
     Require all denied
 </FilesMatch>
 
-# Block access to .git directory
 RedirectMatch 404 /\.git
 
-# Protect against common bad bots (optional)
+# Protect against common bad bots (PRODUCTION ONLY — keeps local curl/wget working)
 <IfModule mod_rewrite.c>
+    RewriteCond %{ENV:LOCAL} !1
     RewriteCond %{HTTP_USER_AGENT} (libwww-perl|wget|python-requests|scrapy|curl) [NC]
     RewriteRule .* - [F,L]
 </IfModule>
 
 # ---------------------------------------------------------------------
-# 8. Compression (optional, speeds up the site)
+# 7. Compression (skipped on localhost — XAMPP sometimes already compresses)
 # ---------------------------------------------------------------------
 <IfModule mod_deflate.c>
+    RewriteCond %{ENV:LOCAL} !1
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css \
         text/javascript application/javascript application/json \
         application/xml image/svg+xml
 </IfModule>
 
 # ---------------------------------------------------------------------
-# 9. Cache headers for static assets (optional)
+# 8. Cache headers for static assets (safe on both)
 # ---------------------------------------------------------------------
 <IfModule mod_expires.c>
     ExpiresActive On
