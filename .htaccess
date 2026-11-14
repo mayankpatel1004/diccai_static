@@ -1,0 +1,98 @@
+# =====================================================================
+#  diccai.com — .htaccess
+#  Clean URLs (hide .php), HTTPS + www canonicalization
+# =====================================================================
+
+Options -MultiViews
+Options +FollowSymLinks
+RewriteEngine On
+
+# ---------------------------------------------------------------------
+# 1. Force HTTPS
+# ---------------------------------------------------------------------
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ---------------------------------------------------------------------
+# 2. Force www (remove the "!" if you prefer non-www)
+# ---------------------------------------------------------------------
+RewriteCond %{HTTP_HOST} ^diccai\.com$ [NC]
+RewriteRule ^ https://www.diccai.com%{REQUEST_URI} [L,R=301]
+
+# ---------------------------------------------------------------------
+# 3. Redirect direct .php requests to the clean URL (301)
+#    /our-objectives.php        -> /our-objectives
+#    /our-objectives.php?id=5   -> /our-objectives?id=5
+#    Skips index.php so the front controller still works if present.
+# ---------------------------------------------------------------------
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
+
+# ---------------------------------------------------------------------
+# 4. Internally map clean URLs back to .php
+#    /our-objectives  -> /our-objectives.php
+#    Only if the .php file actually exists (so 404s behave correctly).
+# ---------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]
+
+# ---------------------------------------------------------------------
+# 5. (Optional) If you use a front controller (index.php), route
+#    everything else through it. Comment out if not needed.
+# ---------------------------------------------------------------------
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteRule ^ index.php [L,QSA]
+
+# ---------------------------------------------------------------------
+# 6. Pretty directory URLs: /gallery -> /gallery/ (optional)
+# ---------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule ^(.+)$ /$1/ [R=301,L]
+
+# ---------------------------------------------------------------------
+# 7. Security hardening
+# ---------------------------------------------------------------------
+# Disable directory listing
+Options -Indexes
+
+# Block access to sensitive files
+<FilesMatch "^(\.env|\.htaccess|\.htpasswd|composer\.(json|lock)|package(-lock)?\.json|\.gitignore|README\.md)$">
+    Require all denied
+</FilesMatch>
+
+# Block access to .git directory
+RedirectMatch 404 /\.git
+
+# Protect against common bad bots (optional)
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP_USER_AGENT} (libwww-perl|wget|python-requests|scrapy|curl) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# ---------------------------------------------------------------------
+# 8. Compression (optional, speeds up the site)
+# ---------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css \
+        text/javascript application/javascript application/json \
+        application/xml image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------
+# 9. Cache headers for static assets (optional)
+# ---------------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg   "access plus 1 month"
+    ExpiresByType image/png    "access plus 1 month"
+    ExpiresByType image/webp   "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css     "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType font/woff2   "access plus 1 year"
+</IfModule>
