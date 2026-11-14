@@ -1,10 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+# ------------------------------------------------------------------
+# Config
+# ------------------------------------------------------------------
 LOCAL_DIR="/opt/lampp/htdocs/diccai_static"
 REMOTE_USER="u797036281"
 REMOTE_HOST="82.112.239.225"
-REMOTE_DIR="/home/u797036281/domains/diccai.com/public_html"
+REMOTE_PORT="65002"
+REMOTE_DIR="/home/u797234481/domains/diccai.com/public_html"
 BRANCH="main"
 
 # ------------------------------------------------------------------
@@ -31,24 +35,26 @@ git push origin "$BRANCH"
 echo "✅ Local push done."
 
 # ------------------------------------------------------------------
-# 4. Remote pull + reset to origin, then optional cache clear / reload
+# 4. Remote pull + reset to origin/main over SSH (port 65002)
 # ------------------------------------------------------------------
-ssh "${REMOTE_USER}@${REMOTE_HOST}" "bash -s" <<EOF
+ssh -p "$REMOTE_PORT" \
+    -o BatchMode=yes \
+    -o ConnectTimeout=15 \
+    -o StrictHostKeyChecking=accept-new \
+    "${REMOTE_USER}@${REMOTE_HOST}" "bash -s" <<EOF
 set -euo pipefail
 
 echo "=== Updating diccai.com ==="
 cd "$REMOTE_DIR"
 
-# Make sure we are on the right branch
 git fetch origin "$BRANCH"
 git reset --hard "origin/$BRANCH"
-git clean -fd   # remove untracked files (comment out if you keep uploads locally on server)
+git clean -fd
 
-# Optional: clear caches / set permissions / reload services here
+# Optional post-deploy hooks (uncomment what applies):
 # php artisan cache:clear 2>/dev/null || true
 # find . -type d -exec chmod 755 {} \;
 # find . -type f -exec chmod 644 {} \;
-# pm2 reload all 2>/dev/null || true
 
 echo "✅ Remote updated to origin/$BRANCH"
 EOF
