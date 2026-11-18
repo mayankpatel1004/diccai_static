@@ -74,11 +74,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <span class="hidden md:inline-flex items-center gap-1.5 text-amber-400 font-semibold">
           <i class="fa-solid fa-landmark"></i> Divyang Indian Chamber of Commerce &amp; Industry
         </span>
-        <a href="tel:9370383218" class="hover:text-amber-400 transition inline-flex items-center gap-1.5">
-          <i class="fa-solid fa-phone text-amber-400"></i> <span>937-038-3218</span>
+        <a href="tel:8005896807" class="hover:text-amber-400 transition inline-flex items-center gap-1.5">
+          <i class="fa-solid fa-phone text-amber-400"></i> <span>800-589-6807</span>
         </a>
-        <a href="mailto:diccai.divyang@gmail.com" class="hover:text-amber-400 transition inline-flex items-center gap-1.5">
-          <i class="fa-solid fa-envelope text-amber-400"></i> <span>diccai.divyang@gmail.com</span>
+        <a href="mailto:info@diccai.com" class="hover:text-amber-400 transition inline-flex items-center gap-1.5">
+          <i class="fa-solid fa-envelope text-amber-400"></i> <span>info@diccai.com</span>
         </a>
       </div>
       <div class="flex items-center gap-4">
