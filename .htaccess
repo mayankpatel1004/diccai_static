@@ -99,3 +99,16 @@ RedirectMatch 404 /\.git
     ExpiresByType application/javascript "access plus 1 week"
     ExpiresByType font/woff2   "access plus 1 year"
 </IfModule>
+
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect specific pages to homepage
+    RewriteRule ^about-diccai/?$ / [R=301,L]
+    RewriteRule ^shipping-and-delivery/?$ / [R=301,L]
+    RewriteRule ^customize-services-provider/?$ / [R=301,L]
+    RewriteRule ^terms-and-conditions/?$ / [R=301,L]
+    RewriteRule ^cancellation-and-refund/?$ / [R=301,L]
+    RewriteRule ^privacy-policy-1/?$ / [R=301,L]
+</IfModule>
