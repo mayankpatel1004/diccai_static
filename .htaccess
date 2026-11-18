@@ -111,4 +111,8 @@ RedirectMatch 404 /\.git
     RewriteRule ^terms-and-conditions/?$ / [R=301,L]
     RewriteRule ^cancellation-and-refund/?$ / [R=301,L]
     RewriteRule ^privacy-policy-1/?$ / [R=301,L]
+
+    # Redirect specific PDFs to homepage
+    RewriteRule ^theme/default/images/80G\ provisional\.pdf$ / [R=301,L]
+    RewriteRule ^theme/default/images/10AC-Form\.pdf$ / [R=301,L]
 </IfModule>
