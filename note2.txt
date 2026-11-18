@@ -25,3 +25,18 @@ git reset --hard origin/main
 EOF
 
 echo "Deployment successful."
+
+
+
+
+
+
+
+
+
+https://www.diccai.com/about-diccai
+https://www.diccai.com/shipping-and-delivery
+https://www.diccai.com/customize-services-provider
+https://www.diccai.com/terms-and-conditions
+https://www.diccai.com/cancellation-and-refund
+https://www.diccai.com/privacy-policy-1
