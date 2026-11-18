@@ -86,9 +86,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <span class="text-slate-600 hidden sm:inline">|</span>
         <a href="<?php echo $url;?>contact" class="hover:text-amber-400 transition hidden sm:inline">Contact</a>
         <div class="flex items-center gap-2.5 pl-2 border-l border-navy-800">
-          <a href="https://www.facebook.com/profile.php?id=100064243166426" aria-label="Facebook" class="w-6 h-6 rounded-full bg-navy-800 hover:bg-amber-500 hover:text-navy-950 flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-[11px]"></i></a>
-          <!-- <a href="#" aria-label="LinkedIn" class="w-6 h-6 rounded-full bg-navy-800 hover:bg-amber-500 hover:text-navy-950 flex items-center justify-center transition"><i class="fa-brands fa-linkedin-in text-[11px]"></i></a> -->
-          <a href="https://www.instagram.com/_diccai/" aria-label="Instagram" class="w-6 h-6 rounded-full bg-navy-800 hover:bg-amber-500 hover:text-navy-950 flex items-center justify-center transition"><i class="fa-brands fa-instagram text-[11px]"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=100064243166426" target="_blank" aria-label="Facebook" class="w-6 h-6 rounded-full bg-navy-800 hover:bg-amber-500 hover:text-navy-950 flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-[11px]"></i></a>
+          <a href="https://www.youtube.com/@DICCAI_Official?app=desktop" target="_blank" aria-label="LinkedIn" class="w-6 h-6 rounded-full bg-navy-800 hover:bg-amber-500 hover:text-navy-950 flex items-center justify-center transition"><i class="fa-brands fa-youtube text-[11px]"></i></a>
+          <a href="https://www.instagram.com/_diccai/" target="_blank" aria-label="Instagram" class="w-6 h-6 rounded-full bg-navy-800 hover:bg-amber-500 hover:text-navy-950 flex items-center justify-center transition"><i class="fa-brands fa-instagram text-[11px]"></i></a>
         </div>
       </div>
     </div>
